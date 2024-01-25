@@ -1,1 +1,0 @@
-import{_ as o,c as t,f as r,h as n,b as c,g as s,o as a,e as _}from"./index-5ZBBZOpH.js";const l={},d=c("h1",null,"404，路徑不存在，請返回首頁",-1);function i(f,u){const e=s("router-link");return a(),t("div",null,[d,r(e,{to:"/"},{default:n(()=>[_("回首頁")]),_:1})])}const p=o(l,[["render",i]]);export{p as default};
