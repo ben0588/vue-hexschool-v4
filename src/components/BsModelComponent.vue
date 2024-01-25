@@ -29,10 +29,14 @@
                     type="text"
                     class="form-control"
                     placeholder="請輸入圖片連結"
-                    v-model="img_update"
+                    v-model="tempData.imageUrl"
                   />
                 </div>
                 <img class="img-fluid" :src="tempData.imageUrl" alt="" />
+              </div>
+              <div class="input-group mb-3">
+                <input class="form-control" type="file" name="file-to-upload" ref="imgUpload" />
+                <input class="input-group-text" type="button" value="上傳圖片" @click="uploadImg" />
               </div>
               <div>
                 <button class="btn btn-outline-primary btn-sm d-block w-100" @click="addImgUpdate">
@@ -92,7 +96,7 @@
                     min="0"
                     class="form-control"
                     placeholder="請輸入原價"
-                    v-model="tempData.origin_price"
+                    v-model.number="tempData.origin_price"
                   />
                 </div>
                 <div class="mb-3 col-md-6">
@@ -103,7 +107,21 @@
                     min="0"
                     class="form-control"
                     placeholder="請輸入售價"
-                    v-model="tempData.price"
+                    v-model.number="tempData.price"
+                  />
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="mb-3 col-md-6">
+                  <label for="origin_price" class="form-label">商品評價初始星級</label>
+                  <input
+                    id="origin_price"
+                    type="number"
+                    min="0"
+                    class="form-control"
+                    placeholder="請輸入評價初始星級"
+                    v-model.number="tempData.rating"
                   />
                 </div>
               </div>
@@ -205,6 +223,25 @@ export default {
       this.img_update = '';
       // 統一關閉模組後清空資料
     },
+    async uploadImg() {
+      try {
+        const file = this.$refs.imgUpload.files[0];
+        const formData = new FormData();
+        formData.append('file-to-upload', file);
+
+        const api = `${import.meta.env.VITE_BASE_API_URL}/v2/api/${import.meta.env.VITE_API_PATH}/admin/upload`;
+        const headers = {
+          'Content-Type': 'multipart/form-data'
+        };
+        const response = await axios.post(api, formData, { headers });
+        if (response.status === 200) {
+          this.tempData.imageUrl = response.data.imageUrl;
+          this.img_update = response.data.imageUrl;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
     addImgUpdate() {
       /*
         未來使用檔案上傳方向：
@@ -212,15 +249,14 @@ export default {
           - 執行更新圖片API，將暫存商品圖片更換與 tempData imageUrl 替換成成功的
           - 將暫存商品檔案清除
       */
+
+      // 功能暫時不用，用檔案
       this.tempData.imageUrl = this.img_update;
     },
     deleteImgUpdate() {
       this.tempData.imageUrl = '';
       this.img_update = '';
     },
-    // callAllProducts() {
-
-    // },
     async addOrPutProduct() {
       try {
         const type = this.tempData.id ? 'edit' : 'create';

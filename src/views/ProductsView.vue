@@ -13,6 +13,7 @@
           <th scope="col">商品名稱</th>
           <th scope="col">原價</th>
           <th scope="col">售價</th>
+          <th scope="col">星級評分</th>
           <th scope="col">是否啟用</th>
           <th scope="col">編輯</th>
         </tr>
@@ -28,6 +29,9 @@
           </td>
           <td>
             {{ item.price }}
+          </td>
+          <td>
+            {{ item.rating }}
           </td>
           <td>
             <span class="text-success" v-if="item.is_enabled">啟用</span>
@@ -75,7 +79,8 @@ export default {
           origin_price: '',
           description: '',
           content: '',
-          is_enabled: 1
+          is_enabled: 1,
+          rating: 0
         };
         this.$refs.bsModalComponent.openModal();
       } else {
