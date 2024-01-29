@@ -45,26 +45,53 @@
         </tr>
       </tbody>
     </table>
+    <!-- <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        <li class="page-item" :class="{ disabled: !pagination.has_pre }">
+          <a class="page-link" href="#" @click.prevent="getProducts(pagination.current_page - 1)"
+            >&lt;</a
+          >
+        </li>
+        <li class="page-item" v-for="page in pagination.total_pages" :key="page + 2123">
+          <a
+            class="page-link"
+            href="#"
+            @click.prevent="getProducts(page)"
+            :class="{ active: page === pagination.current_page }"
+            >{{ page }}</a
+          >
+        </li>
+        <li class="page-item" :class="{ disabled: !pagination.has_next }">
+          <a class="page-link" href="#" @click.prevent="getProducts(pagination.current_page + 1)"
+            >></a
+          >
+        </li>
+      </ul>
+    </nav> -->
+    <Pagination :pagination="pagination" :get-products="getProducts"></Pagination>
     <h2>查看商品詳情(樣式未來會在更改)</h2>
     {{ product }}
   </div>
-  <BsModelComponent ref="bsModalComponent" :set-data="tempData" :getProducts="getProducts" />
+  <BsModelComponent ref="bsModalComponent" :set-data="tempData" :get-products="getProducts" />
 </template>
 
 <script>
 import axios from 'axios';
 import BsModelComponent from '@/components/BsModelComponent.vue';
+import Pagination from '@/components/Pagination.vue';
 
 export default {
   data() {
     return {
       products: [],
       product: {},
-      tempData: ''
+      tempData: '',
+      pagination: []
     };
   },
   components: {
-    BsModelComponent
+    BsModelComponent,
+    Pagination
   },
   methods: {
     openModal(type, data) {
@@ -89,13 +116,14 @@ export default {
         this.$refs.bsModalComponent.openModal();
       }
     },
-    async getProducts() {
+    async getProducts(page = 1) {
       try {
         const api = `${import.meta.env.VITE_BASE_API_URL}/v2/api/${
           import.meta.env.VITE_API_PATH
-        }/admin/products/all`;
+        }/admin/products?page=${page}`;
         const response = await axios.get(api);
-        const { products } = response.data;
+        const { products, pagination } = response.data;
+        this.pagination = pagination;
         this.products = Object.values(products);
       } catch (error) {
         console.log(error?.response?.data?.message);

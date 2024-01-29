@@ -119,6 +119,7 @@
                     id="origin_price"
                     type="number"
                     min="0"
+                    max="5"
                     class="form-control"
                     placeholder="請輸入評價初始星級"
                     v-model.number="tempData.rating"
@@ -237,6 +238,7 @@ export default {
         if (response.status === 200) {
           this.tempData.imageUrl = response.data.imageUrl;
           this.img_update = response.data.imageUrl;
+          this.$refs.imgUpload.value = '';
         }
       } catch (error) {
         console.log(error);
