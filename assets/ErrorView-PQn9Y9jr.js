@@ -1,0 +1,1 @@
+import{_ as o,c as t,f as r,i as n,b as c,h as s,o as a,g as _}from"./index-MipH8PC0.js";const l={},i=c("h1",null,"404，路徑不存在，請返回首頁",-1);function d(f,u){const e=s("router-link");return a(),t("div",null,[i,r(e,{to:"/"},{default:n(()=>[_("回首頁")]),_:1})])}const p=o(l,[["render",d]]);export{p as default};
